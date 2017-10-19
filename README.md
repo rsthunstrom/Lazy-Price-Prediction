@@ -3,8 +3,8 @@
 
 PREDICT 498
 
-Josh 
-Masae
-Stuart
-Bill
-Reed
+* Josh 
+* Masae
+* Stuart
+* Bill
+* Reed
