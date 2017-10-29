@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Oct 29 16:40:04 2017
+
+@author: z013nx1
+"""
 
 # libs required
 import pandas as pd
@@ -13,12 +19,10 @@ import numpy as np
 ##################
 ##################
 
-rdd = pd.read_table('manualscrapequintile.txt', sep = "|") # import text file with pipe delimiter
-df = pd.DataFrame(rdd) #convert to pandas df
 
-df_sort = df.sort_values([' ticker ', ' year ']) #sort by ticker and year
+df_sort = df.sort_values(['Ticker', 'File Date']) #sort by ticker and year
 
-df_sort['text_list'] = df_sort.groupby((' ticker ', ' year '))[' text'].apply(lambda x: list(x)).tolist() #create list from text
+df_sort['text_list'] = df_sort.groupby(('Ticker', 'File Date'))['RiskFactorText'].apply(lambda x: list(x)).tolist() #create list from text
 
 df_sort.reset_index(drop = 'index') #reset index after sort
 
@@ -112,12 +116,12 @@ duplicate = []
 #loop through each row and calculate similarity measures if the tickers are the same
 #assign a duplicate if the two quarters have already been analyzed so we can exclude later
 for i in range(len(df_sort)-1):
-    if df_sort.iloc[i][' ticker '] == df_sort.iloc[i +1][' ticker ']:
-        cos_value = calc_cosine(df_sort.iloc[i]['text_list'][0], df_sort.iloc[i+1]['text_list'][0])
+    if df_sort.ix[i, 'Ticker'] == df_sort.ix[i+1, 'Ticker']:
+        cos_value = calc_cosine(df_sort.ix[i, 'text_list'][0], df_sort.ix[i+1, 'text_list'][0])
         cos_sim.append(cos_value)
-        j_value = calc_jaccard(df_sort.iloc[i]['text_list'][0], df_sort.iloc[i+1]['text_list'][0])
+        j_value = calc_jaccard(df_sort.ix[i, 'text_list'][0], df_sort.ix[i+1, 'text_list'][0])
         jac_sim.append(j_value)
-        simple_value = calc_simple(df_sort.iloc[i]['text_list'][0], df_sort.iloc[i+1]['text_list'][0])
+        simple_value = calc_simple(df_sort.ix[i, 'text_list'][0], df_sort.ix[i+1, 'text_list'][0])
         simple_sim.append(simple_value)
         duplicate.append(0)
     else:
@@ -147,7 +151,6 @@ df_final = df_sort[df_sort['duplicate'] != 1] #remove any rows which are the dup
 #######################
 #######################
 #######################
-
 
 # cosine similarity quintile values
 # quantile set to 0.20 for quintile
