@@ -13,11 +13,9 @@ from pyparsing import (makeHTMLTags, SkipTo, commonHTMLEntity, replaceHTMLEntity
     htmlComment, anyOpenTag, anyCloseTag, LineEnd, OneOrMore, replaceWith)
 from pyparsing import ParserElement
 
-#import text file of 10 companies from 2017-06-30 report date and 2016-06-30 report date
+#import text file of Consumer Staple companies
 #This will be an input from web scraping DF in Michelle's web scrape code
-#proj15output4
-rdd = pd.read_excel('/Users/z013nx1/Downloads/Project/proj15aoutput4.xlsx') #import text file with pipe delimiter
-#rdd = pd.read_excel('/Users/z013nx1/Downloads/webScrapeURL.xlsx') #import text file with pipe delimiter
+rdd = pd.read_excel('/Users/z013nx1/Downloads/Project/proj15aoutputCS.xlsx') #import text file with pipe delimiter
 df = pd.DataFrame(rdd) #convert to pandas df
 
 
