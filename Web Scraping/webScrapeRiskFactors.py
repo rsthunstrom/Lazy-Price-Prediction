@@ -45,12 +45,15 @@ df['Soup'] = allsoup #create new column from scraped and cleaned HTML data
 #need to determine which keywords we will use to parse the file
 df['RiskFactors'] = df['Soup'].str.contains('risk factors', regex=True)
 
-df['Cautionary1'] = df['Soup'].str.contains('forward-looking and cautionary statements', regex=True)
-
-df['Cautionary2'] = df['Soup'].str.contains('forward looking and cautionary statements', regex=True)
-
 df['unregistered'] = df['Soup'].str.contains('unregistered sales of equity', regex=True)
 
+df['Cautionary1'] = df['Soup'].str.contains('statements about Kroger', regex=True)
+
+df['Cautionary2'] = df['Soup'].str.contains('forward-looking information', regex=True)
+
+df['Cautionary3'] = df['Soup'].str.contains('forward-looking statements', regex=True)
+
+df['Cautionary4'] = df['Soup'].str.contains('cautionary statement', regex=True)
 
 RFText = [] #empty list for risk factors after they are parsed
         
@@ -61,25 +64,43 @@ RFText = [] #empty list for risk factors after they are parsed
 #we collect after the start with [1] and before the end with [0]
 
 for i in range(len(df)):
-    
-    if df.ix[i, 'Cautionary2']==True:
         
-        start = 'item 4.'
-        end = 'cautionary statements'
+    if df.ix[i, 'Cautionary1']==True:
+        #Kroger
+        start = 'item 3.'
+        end = 'statements about Kroger'
+        s = df.ix[i, 'Soup']
+        rf = (s.split(start))[0].split(end)[-1]
+        RFText.append(rf)
+        print('caution3', i)
+        
+    elif df.ix[i, 'Cautionary2']==True:
+        #estee lauder 
+        start = 'item 3.'
+        end = 'forward-looking information'
         s = df.ix[i, 'Soup']
         rf = (s.split(start))[1].split(end)[-1]
         RFText.append(rf)
-        print('caution2', i)
+        print('caution3', i)
         
-    elif df.ix[i, 'Cautionary1']==True:
-        
-        start = 'item 4.'
-        end = 'cautionary statements'
+    elif df.ix[i, 'Cautionary3']==True:
+        #Kraft Heinz
+        start = 'item 3.'
+        end = 'forward-looking statements'
         s = df.ix[i, 'Soup']
         rf = (s.split(start))[1].split(end)[-1]
         RFText.append(rf)
         print('caution1', i)
-        
+
+    elif df.ix[i, 'Cautionary4']==True:
+        #general mills
+        start = 'item 3.'
+        end = 'cautionary statement'
+        s = df.ix[i, 'Soup']
+        rf = (s.split(start))[1].split(end)[-1]
+        RFText.append(rf)
+        print('caution2', i)
+
     elif df.ix[i, 'RiskFactors']==True:
         start = 'unregistered sales of equity'
         end = 'risk factors'
