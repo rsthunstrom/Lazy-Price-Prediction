@@ -30,7 +30,8 @@ df_init['File Date'] = pd.to_datetime(df_init['File Date']) #convert date to tim
 start_time = df_init['File Date'].max() #2017-11-01
 
 #create a file for each month for the last 10 years
-for i in range(-4, -6244, -4):
+for i in range(-4, -8, -4):
+
     start_date = df_init['File Date'].max() + timedelta(weeks = i) #beginning current month
     end_date = df_init['File Date'].max() + timedelta(weeks = i +4) # ending current month
     ly_start = df_init['File Date'].max() + timedelta(weeks = i - 56) #beginning ly month
@@ -80,7 +81,7 @@ for i in range(-4, -6244, -4):
     df['Cautionary3'] = df['Soup'].str.contains('forward-looking statements', regex=True)
     
     df['Cautionary4'] = df['Soup'].str.contains('cautionary statement', regex=True)
-    
+
     RFText = [] #empty list for risk factors after they are parsed
             
     #determine if risk factors are included in the file
@@ -298,7 +299,7 @@ for i in range(-4, -6244, -4):
                 print('caution3', i)
             elif df.ix[i, 'Cautionary3']==True:
                 #Kraft Heinz
-                start = 'item 3.'
+                start = 'unregistered sales of equity'
                 end = 'forward-looking statements'
                 s = df.ix[i, 'Soup']
                 rf = (s.split(start))[1].split(end)[-1]
@@ -349,7 +350,7 @@ for i in range(-4, -6244, -4):
     
     df_sort['text_list'] = df_sort.groupby(('Ticker', 'File Date'))['RiskFactorText'].apply(lambda x: list(x)).tolist() #create list from text
     
-    df_sort.reset_index(drop = 'index') #reset index after sort
+    df_new = df_sort.reset_index(drop = 'index') #reset index after sort
     
     ##################################
     ##################################
@@ -440,13 +441,13 @@ for i in range(-4, -6244, -4):
     
     #loop through each row and calculate similarity measures if the tickers are the same
     #assign a duplicate if the two quarters have already been analyzed so we can exclude later
-    for i in range(len(df_sort)-1):
-        if df_sort.ix[i, 'Ticker'] == df_sort.ix[i+1, 'Ticker']:
-            cos_value = calc_cosine(df_sort.ix[i, 'text_list'][0], df_sort.ix[i+1, 'text_list'][0])
+    for i in range(len(df_new)-1):
+        if df_new.ix[i, 'Ticker'] == df_new.ix[i+1, 'Ticker']:
+            cos_value = calc_cosine(df_new.ix[i, 'text_list'][0], df_new.ix[i+1, 'text_list'][0])
             cos_sim.append(cos_value)
-            j_value = calc_jaccard(df_sort.ix[i, 'text_list'][0], df_sort.ix[i+1, 'text_list'][0])
+            j_value = calc_jaccard(df_new.ix[i, 'text_list'][0], df_new.ix[i+1, 'text_list'][0])
             jac_sim.append(j_value)
-            simple_value = calc_simple(df_sort.ix[i, 'text_list'][0], df_sort.ix[i+1, 'text_list'][0])
+            simple_value = calc_simple(df_new.ix[i, 'text_list'][0], df_new.ix[i+1, 'text_list'][0])
             simple_sim.append(simple_value)
             duplicate.append(0)
         else:
@@ -462,12 +463,12 @@ for i in range(-4, -6244, -4):
     duplicate.append(1)
     
     # append similarity lists as a column in dataframe
-    df_sort['cosine_similarity'] = cos_sim
-    df_sort['jaccard_similarity'] = jac_sim
-    df_sort['simple_similarity'] = simple_sim
-    df_sort['duplicate'] = duplicate
+    df_new['cosine_similarity'] = cos_sim
+    df_new['jaccard_similarity'] = jac_sim
+    df_new['simple_similarity'] = simple_sim
+    df_new['duplicate'] = duplicate
     
-    df_final = df_sort[df_sort['duplicate'] != 1] #remove any rows which are the duplicate for each ticker
+    df_final = df_new[df_new['duplicate'] != 1] #remove any rows which are the duplicate for each ticker
     
     #######################
     #######################
@@ -556,4 +557,6 @@ for i in range(-4, -6244, -4):
     #############
     #############
     
-    df_final.to_csv('/Users/z013nx1/Documents/November2017.txt') # export to text
+    df_clean = df_final.drop(['Soup', 'Current', 'RiskFactors', 'unregistered', 'Cautionary1', \
+    'Cautionary2', 'Cautionary3', 'Cautionary4', 'RiskFactorText', 'text_list'], axis = 1)
+    df_clean.to_csv('/Users/z013nx1/Documents/November2017.txt', sep = ",") # export to text
