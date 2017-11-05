@@ -1,36 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Nov  4 14:52:53 2017
-
-@author: z013nx1
-"""
-
-from __future__ import division, print_function
-import pandas as pd
-from datetime import timedelta
-import re, math
-from collections import Counter
-import numpy as np
-from __future__ import division, print_function
-import pandas as pd
-import requests  # functions for interacting with web pages
-from bs4 import BeautifulSoup  # DOM html manipulation
-from pyparsing import (makeHTMLTags, SkipTo, commonHTMLEntity, replaceHTMLEntity, 
-    htmlComment, anyOpenTag, anyCloseTag, LineEnd, OneOrMore, replaceWith)
-from pyparsing import ParserElement
-
-#Consumer Staple only dataset
-#proj15aoutput4CS
-rdd = pd.read_excel('/Users/z013nx1/Documents/proj15aoutputCS.xlsx') #import text file with pipe delimiter
-df_init = pd.DataFrame(rdd) #convert to pandas df
-
-
-df_init['File Date'] = pd.to_datetime(df_init['File Date']) #convert date to timedate
-
-start_time = df_init['File Date'].max() #2017-11-01
-
-#create a file for each month for the last 10 years
-for i in range(-4, -8, -4):
+for i in range(-8, -6240, -4):
 
     start_date = df_init['File Date'].max() + timedelta(weeks = i) #beginning current month
     end_date = df_init['File Date'].max() + timedelta(weeks = i +4) # ending current month
@@ -65,6 +33,7 @@ for i in range(-4, -8, -4):
         repeatedNewlines.setParseAction(replaceWith("\n\n"))
         secondPass = repeatedNewlines.transformString(firstPass) #remove additional HTML tags
         allsoup.append(str(secondPass.lower()))
+        print('Soup number', i)
     
     df['Soup'] = allsoup    
     
@@ -291,7 +260,7 @@ for i in range(-4, -8, -4):
                 print('caution3', i)
             elif df.ix[i, 'Cautionary2']==True:
                 #estee lauder
-                start = 'item 3.'
+                start = 'unregistered sales of equity'
                 end = 'forward-looking information'
                 s = df.ix[i, 'Soup']
                 rf = (s.split(start))[1].split(end)[-1]
@@ -557,6 +526,12 @@ for i in range(-4, -8, -4):
     #############
     #############
     
+    # update file path based on end date
+    path = '/Users/z013nx1/Documents/' + end_date.strftime("%B %d %Y") + '.txt' 
+    
+    # strip out bulky columns    
     df_clean = df_final.drop(['Soup', 'Current', 'RiskFactors', 'unregistered', 'Cautionary1', \
     'Cautionary2', 'Cautionary3', 'Cautionary4', 'RiskFactorText', 'text_list'], axis = 1)
-    df_clean.to_csv('/Users/z013nx1/Documents/November2017.txt', sep = ",") # export to text
+    
+    # export to text
+    df_clean.to_csv(path, sep = ",")
