@@ -1,3 +1,33 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Nov  4 14:52:53 2017
+
+@author: z013nx1
+"""
+
+from __future__ import division, print_function
+import pandas as pd
+from datetime import timedelta
+import re, math
+from collections import Counter
+import numpy as np
+from __future__ import division, print_function
+import pandas as pd
+import requests  # functions for interacting with web pages
+from bs4 import BeautifulSoup  # DOM html manipulation
+from pyparsing import (makeHTMLTags, SkipTo, commonHTMLEntity, replaceHTMLEntity, 
+    htmlComment, anyOpenTag, anyCloseTag, LineEnd, OneOrMore, replaceWith)
+from pyparsing import ParserElement
+
+#Consumer Staple only dataset
+#proj15aoutput4CS
+rdd = pd.read_excel('/Users/z013nx1/Documents/proj15aoutputCS.xlsx') #import text file with pipe delimiter
+df_init = pd.DataFrame(rdd) #convert to pandas df
+
+
+df_init['File Date'] = pd.to_datetime(df_init['File Date']) #convert date to timedate
+
+#create a file for each month for the last 10 years
 for i in range(-8, -6240, -4):
 
     start_date = df_init['File Date'].max() + timedelta(weeks = i) #beginning current month
