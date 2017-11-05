@@ -28,7 +28,7 @@ df_init = pd.DataFrame(rdd) #convert to pandas df
 df_init['File Date'] = pd.to_datetime(df_init['File Date']) #convert date to timedate
 
 #create a file for each month for the last 10 years
-for i in range(-8, -6240, -4):
+for i in range(-20, -6240, -4):
 
     start_date = df_init['File Date'].max() + timedelta(weeks = i) #beginning current month
     end_date = df_init['File Date'].max() + timedelta(weeks = i +4) # ending current month
@@ -92,7 +92,7 @@ for i in range(-8, -6240, -4):
     for i in range(len(df)):
         if df.ix[i, 'Report Type']=='10-K':
             if df.ix[i, 'Ticker']=='PEP':
-                if df.ix[i, 'Report Date'] in ('2017-02-15 00:00:00', '2016-02-11 00:00:00', '2015-02-12 00:00:00'):
+                if df.ix[i, 'File Date'] in ('2017-02-15 00:00:00', '2016-02-11 00:00:00', '2015-02-12 00:00:00'):
                     start = 'unresolved staff comments'
                     end = 'risk factors'
                     s = df.ix[i, 'Soup']
@@ -114,7 +114,7 @@ for i in range(-8, -6240, -4):
                 RFText.append(rf)
                 print('PM', i)
             elif df.ix[i, 'Ticker']=='PG':
-                if df.ix[i, 'Report Date'] in ('2014-08-08 00:00:00', '2013-08-08 00:00:00', '2012-08-08 00:00:00', '2011-08-10 00:00:00', '2010-08-13 00:00:00', '2009-08-14 00:00:00'):
+                if df.ix[i, 'File Date'] in ('2014-08-08 00:00:00', '2013-08-08 00:00:00', '2012-08-08 00:00:00', '2011-08-10 00:00:00', '2010-08-13 00:00:00', '2009-08-14 00:00:00'):
                     start = 'unresolved staff comments'
                     end = 'risk factors'
                     s = df.ix[i, 'Soup']
@@ -128,13 +128,13 @@ for i in range(-8, -6240, -4):
                     rf = (s.split(start))[1].split(end)[-1]
                     RFText.append(rf)
                     print('PG', i)
-            elif df.ix[i, 'Ticker']=='SSY':
+            elif df.ix[i, 'Ticker']=='SYY':
                 start = 'unresolved staff comments'
                 end = 'risk factors'
                 s = df.ix[i, 'Soup']
                 rf = (s.split(start))[1].split(end)[-1]
                 RFText.append(rf)
-                print('SSY', i)
+                print('SYY', i)
             elif df.ix[i, 'Ticker']=='TSN':
                 start = 'unresolved staff comments'
                 end = 'risk factors'
@@ -157,7 +157,7 @@ for i in range(-8, -6240, -4):
                 RFText.append(rf)
                 print('GIS', i)
             elif df.ix[i, 'Ticker']=='HSY':
-                if df.ix[i, 'Report Date'] =='2017-02-21':
+                if df.ix[i, 'File Date'] =='2017-02-21':
                     start = 'unresolved staff comments'
                     end = 'risk factors'
                     s = df.ix[i, 'Soup']
@@ -179,7 +179,7 @@ for i in range(-8, -6240, -4):
                 RFText.append(rf)
                 print('HRL', i)
             elif df.ix[i, 'Ticker']=='SJM':
-                if df.ix[i, 'Report Date'] in ('2011-06-28 00:00:00','2010-06-24 00:00:00', '2010-06-24 00:00:00', '2008-06-27 00:00:00'):
+                if df.ix[i, 'File Date'] in ('2011-06-28 00:00:00','2010-06-24 00:00:00', '2010-06-24 00:00:00', '2008-06-27 00:00:00'):
                     start = 'unresolved staff comments'
                     end = 'risk factors'
                     s = df.ix[i, 'Soup']
@@ -194,7 +194,7 @@ for i in range(-8, -6240, -4):
                     RFText.append(rf)
                     print('SJM', i)
             elif df.ix[i, 'Ticker']=='K':
-                if df.ix[i, 'Report Date'] in ('2009-02-24 00:00:00', '2008-02-25 00:00:00'):
+                if df.ix[i, 'File Date'] in ('2009-02-24 00:00:00', '2008-02-25 00:00:00'):
                     start = 'unresolved staff comments'
                     end = 'risk factors'
                     s = df.ix[i, 'Soup']
@@ -237,7 +237,7 @@ for i in range(-8, -6240, -4):
                 RFText.append(rf)
                 print('MKC', i)
             elif df.ix[i, 'Ticker']=='TAP':
-                if df.ix[i, 'Report Date'] in ('2011-02-22 00:00:00', '2010-02-19 00:00:00'):
+                if df.ix[i, 'File Date'] in ('2011-02-22 00:00:00', '2010-02-19 00:00:00'):
                     start = 'unresolved sec staff comments'
                     end = 'risk factors'
                     s = df.ix[i, 'Soup']
@@ -547,6 +547,7 @@ for i in range(-8, -6240, -4):
     df_final['simple_quintile'] = df_final.apply(lambda row: simple_quintile_rank(row), axis = 1)
     
     df_final.drop(['duplicate'], axis = 1) #final DF, dropping duplicate column which is no longer needed
+    print (i)
     
     #############
     #############
