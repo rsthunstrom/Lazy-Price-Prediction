@@ -25,9 +25,15 @@ Master_File['month_cosine_similarity'] = 1.0
 Master_File['month_jaccard_similarity'] = 1.0
 Master_File['month_simple_similarity'] = 1.0
 
-for i in range(-4, -8, -4):
+end_date = df_init['File Date'].min()
+print(end_date)
+
+start_date = pd.to_datetime('2011-06-22 00:00:00')
     
-    end_date = df_init['File Date'].max() + timedelta(weeks = i +4) # ending current month
+    
+for i in range(0, 4, 4):
+    
+    end_date = start_date + timedelta(weeks = i +4) # ending current month
     path = ("/Users/z013nx1/Documents/" + end_date.strftime("%B %d %Y") + ".txt") #path for input
     File = pd.read_csv(path, sep = ',')
     col_name = end_date.strftime("%B %d %Y") #column name for scoring
@@ -132,7 +138,7 @@ for i in range(-4, -8, -4):
 #run the same loop for the rest of the months         
 #loop uses file created from above, but need to create the first file seperately given that we had to
 #initialize similairty measures
-for i in range(-8, -12, -4):
+for i in range(4, 332, 4):
     
     end_date = df_init['File Date'].max() + timedelta(weeks = i +4) # ending current month
     previous_date = df_init['File Date'].max() + timedelta(weeks = i+8) # ending previous month
