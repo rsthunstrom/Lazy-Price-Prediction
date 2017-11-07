@@ -238,5 +238,10 @@ for i in range(4, 332, 4):
 #############
 #############
 
-#path = path = '/Users/z013nx1/Documents/master_file.txt'
-#df_clean.to_csv(path, sep = ",")
+#drop nasty columns
+new = new.drop(['Unnamed: 0_y', 'Unnamed: 0_x''Unnamed: 0', 'File Date_y', 'index_y', 'CIK_y', \
+'Report Type_y', 'Report URL_y', 'index_x', 'CIK_x', 'Report Type_x', 'Report URL_x', \
+'File Date_x'], axis =1)
+
+path = path = '/Users/z013nx1/Documents/master_file_final.txt'
+new.to_csv(path, sep = ",")
