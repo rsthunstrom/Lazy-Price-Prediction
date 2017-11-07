@@ -38,7 +38,7 @@ for i in range(0, 4, 4):
     File = pd.read_csv(path, sep = ',')
     col_name = end_date.strftime("%B %d %Y") #column name for scoring
     File[col_name] = 1 #assign boolean
-    new = pd.merge(File, Master_File, how = 'outer', on='Ticker') #merge new file with master file
+    new = pd.merge(File, Master_File, how = 'outer', on = 'Ticker') #merge new file with master file
     
     #create month specific similarity columns
     columnNameCS = col_name + ' cosine_similarity'
@@ -56,11 +56,6 @@ for i in range(0, 4, 4):
             new.ix[i, columnNameCS] = new.ix[i, 'month_cosine_similarity']
             new.ix[i, columnNameJS] = new.ix[i, 'month_jaccard_similarity']
             new.ix[i, columnNameSS] = new.ix[i, 'month_simple_similarity']
-            
-            #drop columns that are not needed
-            new = new.drop(['cosine_similarity', 'jaccard_similarity', 'simple_similarity', 'cosine_quintile', \
-            'jaccard_quintile', 'simple_quintile', 'month_cosine_similarity', 'month_jaccard_similarity', \
-            'month_simple_similarity', col_name, 'duplicate'], axis = 1)
             
     # cosine similarity quintile values
     # quantile set to 0.20 for quintile
@@ -134,14 +129,29 @@ for i in range(0, 4, 4):
     columnNameSSQuintile = col_name + ' simple_quintile'
     new[columnNameSSQuintile] = new.apply(lambda row: simple_quintile_rank(row), axis = 1)
             
-
+    new = new.drop(['month_cosine_similarity', 'month_jaccard_similarity', 'month_simple_similarity'], axis =1)
 #run the same loop for the rest of the months         
 #loop uses file created from above, but need to create the first file seperately given that we had to
 #initialize similairty measures
-for i in range(4, 332, 4):
     
-    end_date = df_init['File Date'].max() + timedelta(weeks = i +4) # ending current month
-    previous_date = df_init['File Date'].max() + timedelta(weeks = i+8) # ending previous month
+new[['Ticker', 'July 20 2011','July 20 2011 cosine_similarity',
+ 'July 20 2011 jaccard_similarity',
+ 'July 20 2011 simple_similarity',
+ 'July 20 2011 cosine_quintile',
+ 'July 20 2011 jaccard_quintile',
+ 'July 20 2011 simple_quintile']]
+ 
+#testing date loop
+#for i in range(4, 8, 4):
+#    end_date = start_date + timedelta(weeks = i+4) # ending current month
+#    previous_date = start_date + timedelta(weeks = i) # ending previous month
+#    print("enddate is ",  end_date)
+#    print("previousdate is ",  previous_date)
+ 
+for i in range(4, 8, 4):
+    
+    end_date = start_date + timedelta(weeks = i+4) # ending current month
+    previous_date = start_date + timedelta(weeks = i) # ending previous month
     path = ("/Users/z013nx1/Documents/" + end_date.strftime("%B %d %Y") + ".txt") 
     File = pd.read_csv(path, sep = ',')
     col_name = end_date.strftime("%B %d %Y")
@@ -166,10 +176,6 @@ for i in range(4, 332, 4):
             new.ix[i, columnNameCS] = new.ix[i, prevColumnNameCS]
             new.ix[i, columnNameJS] = new.ix[i, prevColumnNameJS]
             new.ix[i, columnNameSS] = new.ix[i, prevColumnNameSS]
-            
-            new = new.drop(['cosine_similarity', 'jaccard_similarity', 'simple_similarity', 'cosine_quintile', \
-            'jaccard_quintile', 'simple_quintile', 'month_cosine_similarity', 'month_jaccard_similarity', \
-            'month_simple_similarity'], axis = 1)
             
         # cosine similarity quintile values
     # quantile set to 0.20 for quintile
@@ -204,7 +210,12 @@ for i in range(4, 332, 4):
     columnNameSSQuintile = col_name + ' simple_quintile'
     new[columnNameSSQuintile] = new.apply(lambda row: simple_quintile_rank(row), axis = 1)
             
-            
+new[['Ticker', 'August 17 2011','August 17 2011 cosine_similarity',
+ 'August 17 2011 jaccard_similarity',
+ 'August 17 2011 simple_similarity',
+ 'August 17 2011 cosine_quintile',
+ 'August 17 2011 jaccard_quintile',
+ 'August 17 2011 simple_quintile']]            
             
 # update file path based on end date
     
