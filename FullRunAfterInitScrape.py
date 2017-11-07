@@ -28,7 +28,8 @@ df_init = pd.DataFrame(rdd) #convert to pandas df
 df_init['File Date'] = pd.to_datetime(df_init['File Date']) #convert date to timedate
 
 #create a file for each month for the last 10 years
-for i in range(-20, -6240, -4):
+#336 next
+for i in range(-336, -520, -4):
 
     start_date = df_init['File Date'].max() + timedelta(weeks = i) #beginning current month
     end_date = df_init['File Date'].max() + timedelta(weeks = i +4) # ending current month
@@ -53,7 +54,7 @@ for i in range(-20, -6240, -4):
     
     allsoup = [] #empty list for soup ie the html data
 
-    for i in range(len(df)):
+    for i in range(14, 22, 1):
         r = requests.get(df.ix[i,'Report URL']) #request from URL
         soup = BeautifulSoup(r.text, "lxml") #convert to soup
         targetHTML = str(soup) #convert to strin
@@ -65,7 +66,9 @@ for i in range(-20, -6240, -4):
         allsoup.append(str(secondPass.lower()))
         print('Soup number', i)
     
-    df['Soup'] = allsoup    
+    #df = df.drop(13)
+    df['Soup'] = allsoup   
+    #df = df.reset_index()
     
     #create boolean for Risk Factors
     #need to determine which keywords we will use to parse the file
@@ -237,15 +240,12 @@ for i in range(-20, -6240, -4):
                 RFText.append(rf)
                 print('MKC', i)
             elif df.ix[i, 'Ticker']=='TAP':
-                if df.ix[i, 'File Date'] in ('2011-02-22 00:00:00', '2010-02-19 00:00:00'):
-                    start = 'unresolved sec staff comments'
-                    end = 'risk factors'
-                    s = df.ix[i, 'Soup']
-                    rf = (s.split(start))[1].split(end)[-1]
+                if df.ix[i, 'File Date'] == '2011-02-22 00:00:00':
+                    rf = 'File has an error'
                     RFText.append(rf)
                     print('TAP', i)
                 else:
-                    start = 'unresolved staff comments'
+                    start = 'staff comments'
                     end = 'risk factors'
                     s = df.ix[i, 'Soup']
                     rf = (s.split(start))[1].split(end)[-1]
@@ -280,7 +280,29 @@ for i in range(-20, -6240, -4):
                 RFText.append(rf)
                 print('WBA', i)
         elif df.ix[i, 'Report Type']=='10-Q':
-            if df.ix[i, 'Cautionary1']==True:
+            if (df.ix[i, 'Ticker'] == 'KHC') | (df.ix[i, 'File Date'] == '2015-08-10 00:00:00'):
+                start = 'item 6.'
+                end = 'risk factors'
+                s = df.ix[i, 'Soup']
+                rf = (s.split(start))[0].split(end)[-1]
+                RFText.append(rf)
+                print('caution3', i)                
+            elif (df.ix[i, 'Ticker'] == 'MNST') | (df.ix[i, 'File Date'] == '2015-05-11 00:00:00'):
+                start = 'sales of equity'
+                end = 'risk factors'
+                s = df.ix[i, 'Soup']
+                rf = (s.split(start))[1].split(end)[-1]
+                RFText.append(rf)
+                print('mnst 2015', i)
+            elif (df.ix[i, 'Ticker'] == 'WBA') | (df.ix[i, 'File Date'] == '2014-12-30 00:00:00'):
+                start = 'item 6.'
+                end = 'risk factors'
+                s = df.ix[i, 'Soup']
+                rf = (s.split(start))[1].split(end)[-1]
+                RFText.append(rf)
+                print('mnst 2015', i)
+                
+            elif df.ix[i, 'Cautionary1']==True:
                 #Kroger
                 start = 'item 3.'
                 end = 'statements about Kroger'
@@ -346,7 +368,7 @@ for i in range(-20, -6240, -4):
     
     
     df_sort = df.sort_values(['Ticker', 'File Date']) #sort by ticker and year
-    
+
     df_sort['text_list'] = df_sort.groupby(('Ticker', 'File Date'))['RiskFactorText'].apply(lambda x: list(x)).tolist() #create list from text
     
     df_new = df_sort.reset_index(drop = 'index') #reset index after sort
