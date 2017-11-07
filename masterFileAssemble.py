@@ -129,7 +129,9 @@ for i in range(0, 4, 4):
     columnNameSSQuintile = col_name + ' simple_quintile'
     new[columnNameSSQuintile] = new.apply(lambda row: simple_quintile_rank(row), axis = 1)
             
-    new = new.drop(['month_cosine_similarity', 'month_jaccard_similarity', 'month_simple_similarity'], axis =1)
+    new = new.drop(['month_cosine_similarity', 'month_jaccard_similarity', 'month_simple_similarity', \
+    'cosine_similarity', 'jaccard_similarity', 'simple_similarity', 'cosine_quintile', 'jaccard_quintile', 'simple_quintile', \
+    'duplicate', col_name], axis =1)
 #run the same loop for the rest of the months         
 #loop uses file created from above, but need to create the first file seperately given that we had to
 #initialize similairty measures
@@ -148,7 +150,7 @@ new[['Ticker', 'July 20 2011','July 20 2011 cosine_similarity',
 #    print("enddate is ",  end_date)
 #    print("previousdate is ",  previous_date)
  
-for i in range(4, 8, 4):
+for i in range(8, 332, 4):
     
     end_date = start_date + timedelta(weeks = i+4) # ending current month
     previous_date = start_date + timedelta(weeks = i) # ending previous month
@@ -210,12 +212,13 @@ for i in range(4, 8, 4):
     columnNameSSQuintile = col_name + ' simple_quintile'
     new[columnNameSSQuintile] = new.apply(lambda row: simple_quintile_rank(row), axis = 1)
             
-new[['Ticker', 'August 17 2011','August 17 2011 cosine_similarity',
- 'August 17 2011 jaccard_similarity',
- 'August 17 2011 simple_similarity',
- 'August 17 2011 cosine_quintile',
- 'August 17 2011 jaccard_quintile',
- 'August 17 2011 simple_quintile']]            
+#validate output
+#new[['Ticker', 'August 17 2011','August 17 2011 cosine_similarity',
+# 'August 17 2011 jaccard_similarity',
+# 'August 17 2011 simple_similarity',
+# 'August 17 2011 cosine_quintile',
+# 'August 17 2011 jaccard_quintile',
+# 'August 17 2011 simple_quintile']]            
             
 # update file path based on end date
     
