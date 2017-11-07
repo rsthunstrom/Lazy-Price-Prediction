@@ -211,6 +211,10 @@ for i in range(8, 332, 4):
     # apply quintile based on each rows value
     columnNameSSQuintile = col_name + ' simple_quintile'
     new[columnNameSSQuintile] = new.apply(lambda row: simple_quintile_rank(row), axis = 1)
+    
+    new = new.drop(['month_cosine_similarity', 'month_jaccard_similarity', 'month_simple_similarity', \
+    'cosine_similarity', 'jaccard_similarity', 'simple_similarity', 'cosine_quintile', 'jaccard_quintile', 'simple_quintile', \
+    'duplicate', col_name], axis =1)
             
 #validate output
 #new[['Ticker', 'August 17 2011','August 17 2011 cosine_similarity',
