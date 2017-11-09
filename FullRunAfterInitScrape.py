@@ -28,11 +28,14 @@ df_init = pd.DataFrame(rdd) #convert to pandas df
 df_init['File Date'] = pd.to_datetime(df_init['File Date']) #convert date to timedate
 
 #create a file for each month for the last 10 years
-#336 next
-for i in range(-336, -520, -4):
+#336 June
+#368 Dec 2010
+#412 start next (need to do the 4 before)
+for i in range(0, -520, -4):
 
     start_date = df_init['File Date'].max() + timedelta(weeks = i) #beginning current month
     end_date = df_init['File Date'].max() + timedelta(weeks = i +4) # ending current month
+    print(end_date)
     ly_start = df_init['File Date'].max() + timedelta(weeks = i - 56) #beginning ly month
     ly_end = df_init['File Date'].max() + timedelta(weeks = i - 44) #ending ly month
     
@@ -54,7 +57,7 @@ for i in range(-336, -520, -4):
     
     allsoup = [] #empty list for soup ie the html data
 
-    for i in range(14, 22, 1):
+    for i in range(len(df)):
         r = requests.get(df.ix[i,'Report URL']) #request from URL
         soup = BeautifulSoup(r.text, "lxml") #convert to soup
         targetHTML = str(soup) #convert to strin
@@ -66,9 +69,9 @@ for i in range(-336, -520, -4):
         allsoup.append(str(secondPass.lower()))
         print('Soup number', i)
     
-    #df = df.drop(13)
+#    df = df.drop(14)
     df['Soup'] = allsoup   
-    #df = df.reset_index()
+#    df = df.reset_index()
     
     #create boolean for Risk Factors
     #need to determine which keywords we will use to parse the file
@@ -93,6 +96,7 @@ for i in range(-336, -520, -4):
     #we collect after the start with [1] and before the end with [0]
     
     for i in range(len(df)):
+        print(df.ix[i, 'Report Type'], df.ix[i, 'Ticker'], df.ix[i, 'File Date'])
         if df.ix[i, 'Report Type']=='10-K':
             if df.ix[i, 'Ticker']=='PEP':
                 if df.ix[i, 'File Date'] in ('2017-02-15 00:00:00', '2016-02-11 00:00:00', '2015-02-12 00:00:00'):
@@ -175,12 +179,20 @@ for i in range(-336, -520, -4):
                     RFText.append(rf)
                     print('HSY', i)
             elif df.ix[i, 'Ticker']=='HRL':
-                start = 'unresolved staff comments'
-                end = 'risk factors'
-                s = df.ix[i, 'Soup']
-                rf = (s.split(start))[1].split(end)[-1]
-                RFText.append(rf)
-                print('HRL', i)
+                if df.ix[i, 'File Date']=='2009-12-16 00:00:00':
+                    RFText.append('Information on the Company’s risk factors \
+                    included in the Management’s Discussion and Analysis of \
+                    Financial Condition and Results of Operations on pages 31 \
+                    through 34 of the Annual Stockholders’ Report for the fiscal \
+                    year ended October 25, 2009, is incorporated herein by reference.')
+                    print('HRL manual', i)
+                else:
+                    start = 'unresolved staff comments'
+                    end = 'risk factors'
+                    s = df.ix[i, 'Soup']
+                    rf = (s.split(start))[1].split(end)[-1]
+                    RFText.append(rf)
+                    print('HRL', i)
             elif df.ix[i, 'Ticker']=='SJM':
                 if df.ix[i, 'File Date'] in ('2011-06-28 00:00:00','2010-06-24 00:00:00', '2010-06-24 00:00:00', '2008-06-27 00:00:00'):
                     start = 'unresolved staff comments'
@@ -286,22 +298,21 @@ for i in range(-336, -520, -4):
                 s = df.ix[i, 'Soup']
                 rf = (s.split(start))[0].split(end)[-1]
                 RFText.append(rf)
-                print('caution3', i)                
-            elif (df.ix[i, 'Ticker'] == 'MNST') | (df.ix[i, 'File Date'] == '2015-05-11 00:00:00'):
-                start = 'sales of equity'
-                end = 'risk factors'
-                s = df.ix[i, 'Soup']
-                rf = (s.split(start))[1].split(end)[-1]
-                RFText.append(rf)
-                print('mnst 2015', i)
+                print('khc 2015', i)                
             elif (df.ix[i, 'Ticker'] == 'WBA') | (df.ix[i, 'File Date'] == '2014-12-30 00:00:00'):
                 start = 'item 6.'
                 end = 'risk factors'
                 s = df.ix[i, 'Soup']
                 rf = (s.split(start))[1].split(end)[-1]
                 RFText.append(rf)
-                print('mnst 2015', i)
-                
+                print('wba 2014', i)
+            elif (df.ix[i, 'Ticker'] == 'MKC') | (df.ix[i, 'File Date'] == '2010-03-31 00:00:00'):
+                start = 'item 6.'
+                end = 'risk factors'
+                s = df.ix[i, 'Soup']
+                rf = (s.split(start))[0].split(end)[-1]
+                RFText.append(rf)
+                print('MKC 2010', i)  
             elif df.ix[i, 'Cautionary1']==True:
                 #Kroger
                 start = 'item 3.'
@@ -309,7 +320,15 @@ for i in range(-336, -520, -4):
                 s = df.ix[i, 'Soup']
                 rf = (s.split(start))[0].split(end)[-1]
                 RFText.append(rf)
-                print('caution3', i)
+                print('Kroger', i)
+            elif (df.ix[i, 'Ticker']=='KR') | (df.ix[i, 'File Date'] == '2009-07-01 00:00:00'):
+                #Kroger
+                start = 'item 3.'
+                end = 'future performance'
+                s = df.ix[i, 'Soup']
+                rf = (s.split(start))[0].split(end)[-1]
+                RFText.append(rf)
+                print('Kroger manual', i)
             elif df.ix[i, 'Cautionary2']==True:
                 #estee lauder
                 start = 'unregistered sales of equity'
@@ -318,22 +337,6 @@ for i in range(-336, -520, -4):
                 rf = (s.split(start))[1].split(end)[-1]
                 RFText.append(rf)
                 print('caution3', i)
-            elif df.ix[i, 'Cautionary3']==True:
-                #Kraft Heinz
-                start = 'unregistered sales of equity'
-                end = 'forward-looking statements'
-                s = df.ix[i, 'Soup']
-                rf = (s.split(start))[1].split(end)[-1]
-                RFText.append(rf)
-                print('caution1', i)
-            elif df.ix[i, 'Cautionary4']==True:
-                #general mills
-                start = 'item 3.'
-                end = 'cautionary statement'
-                s = df.ix[i, 'Soup']
-                rf = (s.split(start))[1].split(end)[-1]
-                RFText.append(rf)
-                print('caution2', i)
             elif df.ix[i, 'RiskFactors']==True:
                 start = 'unregistered sales of equity'
                 end = 'risk factors'
@@ -351,6 +354,22 @@ for i in range(-336, -520, -4):
                     rf = (s.split(end))[-1]
                     RFText.append(rf)
                     print('RF no unreg', i)
+            elif df.ix[i, 'Cautionary4']==True:
+                #general mills
+                start = 'item 3.'
+                end = 'cautionary statement'
+                s = df.ix[i, 'Soup']
+                rf = (s.split(start))[1].split(end)[-1]
+                RFText.append(rf)
+                print('caution2', i)
+            elif df.ix[i, 'Cautionary3']==True:
+                #Kraft Heinz
+                start = 'unregistered sales of equity'
+                end = 'forward-looking statements'
+                s = df.ix[i, 'Soup']
+                rf = (s.split(start))[1].split(end)[-1]
+                RFText.append(rf)
+                print('caution1', i)
             else:
                 RFText.append('NO RISK FACTORS')
                 print('NO RISK FACTORS', i)
