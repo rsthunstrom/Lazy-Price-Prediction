@@ -9,9 +9,7 @@ PREDICT 498 - Team Members
 * Reed
 
 
-## Pipeline
-
-### Order for code
+## Pipeline - Order for code
 
 #### Web Scraping
 1. SP500CoList17.py
