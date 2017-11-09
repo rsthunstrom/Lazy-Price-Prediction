@@ -1,12 +1,11 @@
 # Lazy Price Prediction
 ### Portfolio selection through natural language processing
 
-PREDICT 498
-
+PREDICT 498 - Team Members
+* Bill
 * Josh 
 * Masae
 * Stuart
-* Bill
 * Reed
 
 
