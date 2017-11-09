@@ -1,5 +1,5 @@
 # Lazy Price Prediction
-### Portfolio selection through natural language processing
+## Portfolio selection through natural language processing
 
 PREDICT 498 - Team Members
 * Bill
@@ -9,7 +9,7 @@ PREDICT 498 - Team Members
 * Reed
 
 
-# Pipeline
+## Pipeline
 
 ### Order for code
 
