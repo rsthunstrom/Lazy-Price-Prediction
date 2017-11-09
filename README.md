@@ -26,6 +26,4 @@ PREDICT 498 - Team Members
 
 #### Multi linear regression modeling
 
-<Update>
-<Waiting for R code>
-<Update>
+* Update - Waiting for R code*
