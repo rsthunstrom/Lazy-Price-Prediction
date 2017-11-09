@@ -25,10 +25,10 @@ Master_File['month_cosine_similarity'] = 1.0
 Master_File['month_jaccard_similarity'] = 1.0
 Master_File['month_simple_similarity'] = 1.0
 
-end_date = df_init['File Date'].min()
-print(end_date)
+#end_date = df_init['File Date'].min()
+#print(end_date) #2004-08-13
 
-start_date = pd.to_datetime('2011-06-22 00:00:00')
+start_date = pd.to_datetime('2007-12-12 00:00:00') #4 weeks before first file
     
     
 for i in range(0, 4, 4):
@@ -152,7 +152,7 @@ for i in range(0, 4, 4):
 #    print("enddate is ",  end_date)
 #    print("previousdate is ",  previous_date)
  
-for i in range(4, 332, 4):
+for i in range(4, 520, 4):
     
     end_date = start_date + timedelta(weeks = i+4) # ending current month
     previous_date = start_date + timedelta(weeks = i) # ending previous month
@@ -243,5 +243,8 @@ new = new.drop(['Unnamed: 0_y', 'Unnamed: 0_x''Unnamed: 0', 'File Date_y', 'inde
 'Report Type_y', 'Report URL_y', 'index_x', 'CIK_x', 'Report Type_x', 'Report URL_x', \
 'File Date_x'], axis =1)
 
-path = path = '/Users/z013nx1/Documents/master_file_final.txt'
+path = path = '/Users/z013nx1/Documents/master_file_final_full.txt'
 new.to_csv(path, sep = ",")
+
+path = path = '/Users/z013nx1/Documents/master_file_final_full_pipe.txt'
+new.to_csv(path, sep = "|")
