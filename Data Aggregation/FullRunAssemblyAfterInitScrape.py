@@ -19,6 +19,14 @@ from pyparsing import (makeHTMLTags, SkipTo, commonHTMLEntity, replaceHTMLEntity
     htmlComment, anyOpenTag, anyCloseTag, LineEnd, OneOrMore, replaceWith)
 from pyparsing import ParserElement
 
+#############
+#############
+#############
+# FILE IMPORT
+#############
+#############
+#############
+    
 #Consumer Staple only dataset
 #proj15aoutput4CS
 rdd = pd.read_excel('/Users/z013nx1/Documents/proj15aoutputCS.xlsx') #import text file with pipe delimiter
@@ -26,6 +34,14 @@ df_init = pd.DataFrame(rdd) #convert to pandas df
 
 
 df_init['File Date'] = pd.to_datetime(df_init['File Date']) #convert date to timedate
+
+#############
+#############
+#############
+# WEB SCRAPE
+#############
+#############
+#############
 
 #create a file for each month for the last 10 years
 #336 June
@@ -94,6 +110,14 @@ for i in range(0, -520, -4):
     #start split determines when to start collecting text
     #end split determines when to stop collecting text
     #we collect after the start with [1] and before the end with [0]
+    
+    #############
+    #############
+    #############
+    # RISK FACTOR
+    #############
+    #############
+    #############
     
     for i in range(len(df)):
         print(df.ix[i, 'Report Type'], df.ix[i, 'Ticker'], df.ix[i, 'File Date'])
