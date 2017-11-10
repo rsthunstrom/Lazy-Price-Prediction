@@ -10,10 +10,22 @@ from __future__ import division, print_function
 import pandas as pd
 from datetime import timedelta
 
+###################
+###################
+### IMPORT DATA ###
+###################
+###################
+
 # Read in tickers to initialize dataset
 rdd = pd.read_excel('/Users/z013nx1/Documents/proj15aoutputCS.xlsx') #import text file with pipe delimiter
 df_init = pd.DataFrame(rdd) #convert to pandas df
 df_init['File Date'] = pd.to_datetime(df_init['File Date']) #convert date to timedate
+
+#####################
+#####################
+### FILE ASSEMBLY ###
+#####################
+#####################
 
 # create a unique list of tickers
 tickers = df_init['Ticker'].drop_duplicates()
@@ -33,6 +45,9 @@ start_date = pd.to_datetime('2007-12-12 00:00:00') #4 weeks before first file
 # create file for the first month
 # since we don't have the similarity metrics before the first month
 # we need to initialize the similarity metrics and then update with changes in month 1
+
+
+### FIRST MONTH ###
 
 for i in range(0, 4, 4):
     
@@ -149,7 +164,9 @@ for i in range(0, 4, 4):
 # 'July 20 2011 cosine_quintile',
 # 'July 20 2011 jaccard_quintile',
 # 'July 20 2011 simple_quintile']]
- 
+
+### REMAINING  MONTHS ###
+
 for i in range(4, 520, 4):
     
     end_date = start_date + timedelta(weeks = i+4) # ending current month
