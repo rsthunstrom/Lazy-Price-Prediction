@@ -11,19 +11,16 @@ import pandas as pd
 from datetime import timedelta
 
 # Read in tickers to initialize dataset
-
 rdd = pd.read_excel('/Users/z013nx1/Documents/proj15aoutputCS.xlsx') #import text file with pipe delimiter
 df_init = pd.DataFrame(rdd) #convert to pandas df
 df_init['File Date'] = pd.to_datetime(df_init['File Date']) #convert date to timedate
 
 # create a unique list of tickers
-
 tickers = df_init['Ticker'].drop_duplicates()
 tickers2 = tickers.reset_index()
 Master_File = tickers2.sort().drop('index', axis = 1)
 
 # Initialize similarity numbers
-
 Master_File['month_cosine_similarity'] = 1.0
 Master_File['month_jaccard_similarity'] = 1.0
 Master_File['month_simple_similarity'] = 1.0
