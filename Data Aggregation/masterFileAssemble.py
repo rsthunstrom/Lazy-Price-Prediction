@@ -2,7 +2,7 @@
 """
 Created on Mon Nov  6 10:24:20 2017
 
-@author: z013nx1
+@author: Reed S. Thunstrom
 """
 
 
