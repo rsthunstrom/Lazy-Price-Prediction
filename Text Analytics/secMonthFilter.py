@@ -2,7 +2,7 @@
 """
 Created on Sat Nov  4 14:52:53 2017
 
-@author: z013nx1
+@author: Reed S. Thunstrom
 """
 
 from __future__ import division, print_function
