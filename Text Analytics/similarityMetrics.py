@@ -2,7 +2,7 @@
 """
 Created on Sun Oct 29 16:40:04 2017
 
-@author: z013nx1
+@author: Reed S. Thunstrom
 """
 
 # libs required
