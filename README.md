@@ -26,4 +26,11 @@ PREDICT 498 - Team Members
 
 #### Multi-variate linear regression modeling
 
-*Update - Waiting for R code*
+5. 498_stock_returns_staples_cosine_monthly3-1.R
+  * Calculate stock returns for cosine similarity quintiles
+  
+5. 498_stock_returns_staples_cosine_monthly3-1.R
+  * Calculate stock returns for jacaard similarity quintiles
+
+5. 498_stock_returns_staples_cosine_monthly3-1.R
+  * Calculate stock returns for simple similarity quintiles
