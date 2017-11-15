@@ -24,6 +24,6 @@ PREDICT 498 - Team Members
    * Assemble a master file with all tickers, months, and risk factors.
    * Calculate similarity metrics each month, bucket tickers into quintiles, and append to master file for modeling
 
-#### Multi linear regression modeling
+#### Multi-variate linear regression modeling
 
 *Update - Waiting for R code*
