@@ -37,4 +37,4 @@ PREDICT 498 - Team Members
 
 #### Data Visualization
 
-update with bill's code
+Visualization of portfolio selection and model can be found in the Lazy-Price-Prediction/DataVisualizatoin folder
