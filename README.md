@@ -34,3 +34,7 @@ PREDICT 498 - Team Members
 
 7. 498_stock_returns_staples_simple_monthly2-1.R
     * Calculate stock returns for simple similarity quintiles
+
+#### Data Visualization
+
+update with bill's code
